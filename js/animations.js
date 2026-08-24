@@ -38,9 +38,9 @@ function initPreloader() {
       pre.classList.add('is-lift');
       document.body.classList.remove('is-locked');
       if (hero) hero.classList.add('is-in');
-    }, 780);
+    }, 380);
 
-    setTimeout(() => pre.remove(), 1700);
+    setTimeout(() => pre.remove(), 1100);
   };
 
   /* показываем один раз за сессию — на переходах между страницами не мешаем */
@@ -61,7 +61,12 @@ function initPreloader() {
   /* Прогресс считаем от реального времени, а не от числа кадров.
      rAF замирает в фоновой вкладке, поэтому дублируем таймером
      и подстраховываемся жёстким setTimeout — интро не должно зависнуть. */
-  const DURATION = 4200;
+  /* Было 4200мс. Счётчик держал экран 4,2 секунды, плюс 1,2 на уход —
+     сайт был готов к показу через 0,86с и всё остальное время просто
+     ждал окончания заставки. Вдвое короче: движение то же, ожидание нет. */
+  /* 1200мс. Счётчик держал экран 4,2с, потом 2,1 — а страница готова
+     через 0,35с. Столько же, сколько «Конструктор» у портфолио. */
+  const DURATION = 1200;
   const t0 = Date.now();
 
   const draw = () => {
@@ -76,7 +81,7 @@ function initPreloader() {
 
     if (p >= 1) {
       clearInterval(timer);
-      setTimeout(finish, 420);
+      setTimeout(finish, 160);
       return;
     }
     requestAnimationFrame(draw);
@@ -85,7 +90,7 @@ function initPreloader() {
   const timer = setInterval(draw, 250);   // работает и когда вкладка в фоне
   requestAnimationFrame(draw);
 
-  setTimeout(() => { clearInterval(timer); finish(); }, DURATION + 1200);
+  setTimeout(() => { clearInterval(timer); finish(); }, DURATION + 700);
 }
 
 /* ============================================================

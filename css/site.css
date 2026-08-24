@@ -937,7 +937,10 @@ body::before {
   max-width: 46ch;
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 900ms var(--ease) 500ms, transform 900ms var(--ease) 500ms;
+  /* Этот абзац — самый крупный элемент первого экрана, по нему и считается
+     момент «страница показалась». Он ждал полсекунды и потом проявлялся
+     ещё девять десятых — почти полтора лишних. */
+  transition: opacity 500ms var(--ease) 150ms, transform 500ms var(--ease) 150ms;
 }
 
 .hero.is-in .hero__meta { opacity: 1; transform: none; }
