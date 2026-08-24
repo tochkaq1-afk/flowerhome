@@ -609,19 +609,10 @@ function plural(n, one, few, many) {
    ============================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
+  /* Первому экрану нужны только эти три и корзина с каталогом */
   renderMarquee();
   renderCats();
   renderHits();
-  renderSteps();
-  renderStats();
-  renderServices();
-  renderPromos();
-  renderDelivery();
-  renderWhy();
-  renderFaq();
-  renderReviews();
-  renderSocials();
-  renderFooterCats();
 
   CartUI.init();
   Modal.init();
@@ -629,4 +620,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const year = $('#year');
   if (year) year.textContent = new Date().getFullYear();
+
+  /* Остальные десять разделов лежат ниже экрана. Раньше они рисовались
+     здесь же, одним куском — получалась задача на четверть секунды, и
+     страница на это время переставала отвечать. Теперь по разделу за
+     свободный кадр; если человек прокрутил вниз или кликнул по ссылке
+     раньше очереди, остаток дорисовывается разом. */
+  const later = [renderSteps, renderStats, renderServices, renderPromos,
+                 renderDelivery, renderWhy, renderFaq, renderReviews,
+                 renderSocials, renderFooterCats];
+  let at = 0;
+  const idle = window.requestIdleCallback
+    ? (fn) => requestIdleCallback(fn, { timeout: 260 })
+    : (fn) => setTimeout(fn, 16);
+
+  const step = () => { if (at < later.length) { later[at++](); idle(step); } };
+  const flush = () => { while (at < later.length) later[at++](); };
+
+  addEventListener('click', e => {
+    if (e.target.closest && e.target.closest('a[href^="#"]')) flush();
+  }, true);
+  addEventListener('scroll', function once(){
+    if (scrollY > innerHeight * 0.4){ removeEventListener('scroll', once); flush(); }
+  }, { passive:true });
+
+  idle(step);
 });
