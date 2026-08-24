@@ -494,8 +494,11 @@ function initHeader() {
     const menuOpen = document.getElementById('nav').classList.contains('is-open');
     if (!menuOpen && y > 400 && y > last + 4) {
       header.classList.add('is-hidden');
+      /* полоса фильтров прибита под шапкой и должна уезжать вместе с ней */
+      document.body.classList.add('is-head-hidden');
     } else if (y < last - 4 || y < 200) {
       header.classList.remove('is-hidden');
+      document.body.classList.remove('is-head-hidden');
     }
 
     if (toTop) toTop.classList.toggle('is-shown', y > 900);
