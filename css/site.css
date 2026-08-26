@@ -320,12 +320,19 @@ body::before {
 
 .intro__word--it > span { font-style: italic; color: var(--clay); }
 
+/* Вся цепочка ниже (слово → три строки описания → девиз) была
+   рассчитана на старую заставку в 4200мс. Новая заканчивается на 400мс
+   в худшем случае (медленная загрузка скрипта) — контейнер начинал
+   гаснуть на 560мс, раньше, чем успевало показаться слово «Flower»
+   (старт в 700мс). Человек видел, как всё пропадает почти пустым.
+   Тайминги сжаты в ~7 раз, чтобы вся цепочка укладывалась к 420мс —
+   с запасом до самого раннего момента ухода заставки. */
 .intro.is-active .intro__word > span {
-  animation: introUp 1s var(--ease) forwards;
-  animation-delay: 700ms;
+  animation: introUp .15s var(--ease) forwards;
+  animation-delay: 105ms;
 }
 
-.intro.is-active .intro__word--it > span { animation-delay: 830ms; }
+.intro.is-active .intro__word--it > span { animation-delay: 125ms; }
 
 @keyframes introUp { to { transform: translateY(0); } }
 
@@ -346,12 +353,12 @@ body::before {
 }
 
 .intro.is-active .intro__ln > span {
-  animation: introLine 900ms var(--ease) forwards;
+  animation: introLine .135s var(--ease) forwards;
 }
 
-.intro.is-active .intro__ln:nth-child(1) > span { animation-delay: 1150ms; }
-.intro.is-active .intro__ln:nth-child(2) > span { animation-delay: 1260ms; }
-.intro.is-active .intro__ln:nth-child(3) > span { animation-delay: 1370ms; }
+.intro.is-active .intro__ln:nth-child(1) > span { animation-delay: 173ms; }
+.intro.is-active .intro__ln:nth-child(2) > span { animation-delay: 189ms; }
+.intro.is-active .intro__ln:nth-child(3) > span { animation-delay: 206ms; }
 
 @keyframes introLine { to { transform: translateY(0); opacity: 1; } }
 
@@ -370,7 +377,7 @@ body::before {
 }
 
 .intro.is-active .intro__motto > span {
-  animation: introMotto 1s var(--ease) 1700ms forwards;
+  animation: introMotto .15s var(--ease) 255ms forwards;
 }
 
 @keyframes introMotto {
@@ -387,7 +394,7 @@ body::before {
   vertical-align: middle;
   margin-inline: 14px;
   transform: scaleX(0);
-  transition: transform 900ms var(--ease) 1900ms;
+  transition: transform .135s var(--ease) 285ms;
 }
 
 .intro__motto::before { transform-origin: right; }
